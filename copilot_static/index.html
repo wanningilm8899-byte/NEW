@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>水脉 WaterPulse｜AI Water Risk Copilot</title>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand"><div class="logo">💧</div><div><b>水脉 WaterPulse</b><small>AI Water Risk Copilot · Competition V3</small></div></div>
+    <div class="trust"><span></span><div><b>可信计算模式</b><small>AI 不生成风险数字</small></div></div>
+    <nav>
+      <button class="nav active" data-page="overview"><em>01</em>系统总览</button>
+      <button class="nav" data-page="input"><em>02</em>输入与数据治理</button>
+      <button class="nav" data-page="baseline"><em>03</em>Baseline</button>
+      <button class="nav" data-page="scenario"><em>04</em>Scenario</button>
+      <button class="nav" data-page="assistant"><em>05</em>AI 决策助手</button>
+      <button class="nav" data-page="evidence"><em>06</em>证据与追溯</button>
+      <button class="nav" data-page="qa"><em>07</em>QA / 黄金样例</button>
+      <button class="nav" data-page="export"><em>08</em>导出与日志</button>
+    </nav>
+    <div class="sidebar-foot"><a id="sisterLink" >← 返回水脉研究展示</a><div id="health">后端检查中…</div></div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar"><div><p>人工智能赋能科技型农食企业上游供应链水风险管理研究</p><h1 id="pageTitle">AI Agent 总览</h1></div><div class="top-actions"><span class="pill" id="enginePill">Engine —</span><button class="btn light" id="demoQuick">载入甘蔗演示</button></div></header>
+
+    <section class="page active" id="page-overview">
+      <div class="hero">
+        <div class="hero-copy"><span class="kicker">用户资料 → 可信数据 → 确定性模型 → 管理决策</span><h2>不是“会说话的网页”，而是<br/>会调用真实工具的水风险 Agent</h2><p>前端 AI 负责意图识别、资料抽取与字段映射；中间 Agent 负责编排、状态判断和停止条件；D 的 Baseline 与 E 的 Scenario 负责数值计算；后端 AI 只解释真实 JSON 并生成角色化建议。</p><div class="hero-actions"><button class="btn primary jump" data-target="input">开始一次分析</button><button class="btn outline jump" data-target="assistant">打开 AI 助手</button></div></div>
+        <div class="workflow-card"><div class="workflow-title">12-Step Live Agent Workflow</div><div id="workflow" class="workflow"></div></div>
+      </div>
+      <div class="metrics"><div class="metric"><span>Agent Tools</span><strong>6</strong><small>抽取 / 匹配 / 参数 / Baseline / Scenario / 简报</small></div><div class="metric"><span>D Baseline</span><strong>v1.2</strong><small>统一 Schema + 状态 + input_hash</small></div><div class="metric"><span>Scenario</span><strong>4</strong><small>Peak / Future / Drought / NodeFailure</small></div><div class="metric"><span>可信状态</span><strong>5</strong><small>success / partial / insufficient / conflict / error</small></div></div>
+      <div class="panel"><div class="panel-head"><div><h3>这版已经真正接入 D 的新接口</h3><p>Baseline 不再读取 F 自己的硬编码结果，而是把确认后的用户数据 + B/C 查询结果组装成 D 的 baseline_input.schema.json，再调用 D 的 calculate_baseline(request)。</p></div></div><div class="status-grid"><div class="status ok">✓ 用户输入与字段映射</div><div class="status ok">✓ 人工确认与 Snapshot</div><div class="status ok">✓ B/C 查询适配器</div><div class="status ok">✓ D baseline_api.py v1.2</div><div class="status ok">✓ D 输入/输出 JSON Schema</div><div class="status ok">✓ D 6 类固定样例</div><div class="status ok">✓ E Scenario 复用 D Baseline 节点结果</div><div class="status warn">! 正式宋梓铭 query kernel 可后续替换</div></div></div>
+    </section>
+
+    <section class="page" id="page-input">
+      <div class="section-head"><div><span class="step">STEP 1–8</span><h2>输入、字段映射、数据补齐与冻结</h2><p>先明确任务，再读取对应字段；所有关键企业数据必须经过人工确认。</p></div></div>
+      <div class="grid2">
+        <div class="panel"><h3>① 先选择本次任务</h3><label>用户意图<select id="taskSelect"><option value="baseline">Baseline 基准诊断</option><option value="scenario">Scenario 压力测试</option><option value="data_audit">数据质量检查</option><option value="explain">结果解释</option></select></label><p class="hint">这样可以避免无目的抽取整份 ESG 报告。</p><div class="upload"><input id="fileInput" type="file" accept=".pdf,.docx,.xlsx,.xls,.csv"><b>上传 ESG / PDF / Word / Excel / CSV</b><span>读取后只生成候选字段，不直接进入计算</span></div><button class="btn primary wide" id="uploadBtn">读取并生成字段映射</button><div class="split">或</div><div class="inline"><select id="demoMaterial"><option>甘蔗</option><option>甜菜</option><option>大豆</option></select><button class="btn light" id="demoBtn">载入示范采购结构</button></div><div id="inputMsg" class="notice">尚未读取数据</div></div>
+        <div class="panel"><h3>可信数据规则</h3><div class="rule"><b>Unknown ≠ 0</b><span>未知份额不重新归一化为 100%</span></div><div class="rule"><b>Missing 不由 AI 补数</b><span>专业字段只从注册数据源/批准 Proxy 获取</span></div><div class="rule"><b>Conflict 必须人工确认</b><span>冲突候选值不会自动任选</span></div><div class="rule"><b>Scenario 必须有有效 Baseline</b><span>同一 run_id / input_hash 贯穿全链路</span></div></div>
+      </div>
+      <div class="panel" id="rawPanel" hidden><div class="panel-head"><div><h3>候选数据预览</h3><p>文档抽取只是候选；Excel/CSV 也要确认统计口径。</p></div></div><div class="table-wrap"><table id="rawTable"></table></div></div>
+      <div class="panel" id="mappingPanel" hidden><div class="panel-head"><div><h3>字段映射预览</h3><p>把用户列名统一映射到 Agent Schema。</p></div></div><div class="table-wrap"><table id="mappingTable"></table></div><div class="confirm-line"><label>采购权重<select id="weightMode"><option value="0-1">0–1</option><option value="百分数(0-100)">百分数 0–100</option></select></label><label class="check"><input type="checkbox" id="humanConfirm"> 我已确认关键字段、采购口径和候选值</label><button class="btn primary" id="confirmBtn">确认并冻结 Snapshot</button></div></div>
+      <div class="panel" id="resolvedPanel" hidden><div class="panel-head"><div><h3>Resolved Input｜D 标准输入</h3><p>企业输入 + B/C 注册数据会被组装为 D 的 baseline_input.schema.json。</p></div><span class="pill" id="snapshotPill"></span></div><div id="validationCards" class="metrics compact"></div><button class="btn light" id="resolveBtn">查询 B/C 数据并生成 D Request</button><div class="json-tabs"><button class="tab active" data-json="resolvedJson">D Request</button><button class="tab" data-json="queryTrace">Query Trace</button></div><pre id="resolvedJson" class="json"></pre><pre id="queryTrace" class="json" hidden></pre></div>
+    </section>
+
+    <section class="page" id="page-baseline">
+      <div class="section-head"><div><span class="step">STEP 9–10</span><h2>D Baseline｜确定性计算</h2><p>直接调用 D 的 baseline_api.py v1.2。F 不实现任何 PRWI 数学公式。</p></div><button class="btn primary" id="baselineBtn">运行 D Baseline</button></div>
+      <div id="baselineEmpty" class="empty"><b>尚无 Baseline</b><span>请先生成 D Request。</span></div>
+      <div id="baselineResult" hidden><div id="baselineMeta" class="tracebar"></div><div id="baselineMetrics" class="metrics"></div><div class="grid2"><div class="panel"><h3>AI 风险解释</h3><div id="baselineBrief" class="brief"></div></div><div class="panel"><h3>数据质量与证据</h3><div id="baselineQuality" class="brief"></div></div></div><div class="panel"><div class="panel-head"><div><h3>节点级结果</h3><p>R 是节点自身风险强度；C = W×R 是节点对采购组合的贡献。</p></div></div><div class="table-wrap"><table id="baselineTable"></table></div></div></div>
+    </section>
+
+    <section class="page" id="page-scenario">
+      <div class="section-head"><div><span class="step">STEP 9–10</span><h2>Scenario 压力测试</h2><p>Scenario 以 D Baseline 节点结果为权威基准，不再单独维护一套 F Baseline。</p></div></div>
+      <div class="panel"><div class="scenario-grid"><label>情景<select id="scenarioType"><option value="PeakSeason">当前峰值季节</option><option value="AqueductFuture">Aqueduct Future</option><option value="ExtremeDrought">历史极端干旱</option><option value="NodeFailure" selected>核心节点失效</option></select></label><label>材料<select id="scenarioMaterial"><option>甘蔗</option><option>甜菜</option><option>大豆</option></select></label><label>Future 年份<select id="futureYear"><option>2030</option><option selected>2050</option><option>2080</option></select></label><label>Future 路径<select id="futurePath"><option>Optimistic</option><option selected>BAU</option><option>Pessimistic</option></select></label><label>失效比例<input id="failureFraction" type="number" min="0.25" max="1" step="0.25" value="1"></label><label>库存缓冲<input id="inventory" type="number" min="0" max="0.5" step="0.05" value="0.10"></label></div><button class="btn primary" id="scenarioBtn">运行 Scenario</button></div>
+      <div id="scenarioEmpty" class="empty"><b>尚无 Scenario</b><span>必须先有有效完整 Baseline。</span></div><div id="scenarioResult" hidden><div id="scenarioMeta" class="tracebar"></div><div class="grid2"><div class="panel"><h3>AI 情景解释</h3><div id="scenarioBrief" class="brief"></div></div><div class="panel"><h3>Baseline → Scenario</h3><div id="scenarioDelta" class="brief"></div></div></div><div class="panel"><div class="table-wrap"><table id="scenarioTable"></table></div></div></div>
+    </section>
+
+    <section class="page" id="page-assistant">
+      <div class="section-head"><div><span class="step">STEP 11</span><h2>AI 决策助手</h2><p>AI 只解释工具结果；建议可切换采购、ESG 和风险管理角色。</p></div></div>
+      <div class="role-tabs"><button class="role active" data-role="risk">风险管理</button><button class="role" data-role="procurement">采购负责人</button><button class="role" data-role="esg">ESG 负责人</button></div>
+      <div class="chat-layout"><div class="panel chat"><div id="chatMessages" class="messages"><div class="msg ai"><div class="avatar">AI</div><div class="bubble">我会先判断任务和前置条件，再读取当前 Baseline / Scenario JSON。没有工具结果时，我不会生成风险数字。</div></div></div><div class="composer"><textarea id="chatInput" placeholder="例如：为什么贡献最大的节点不一定是风险最高节点？"></textarea><button class="btn primary" id="chatBtn">发送</button></div></div><div class="panel"><h3>建议问题</h3><button class="suggest">当前甘蔗主要由什么路径驱动？</button><button class="suggest">哪个节点最值得优先管理？为什么？</button><button class="suggest">如果核心节点完全失效，会出现什么供应问题？</button><button class="suggest">当前还缺哪些数据？最值得优先补什么？</button><div class="agent-trace"><h4>最近一次 Agent Trace</h4><pre id="agentTrace">等待调用…</pre></div></div></div>
+    </section>
+
+    <section class="page" id="page-evidence">
+      <div class="section-head"><div><span class="step">EVIDENCE</span><h2>证据、来源与版本</h2><p>评委可以直接查看每一个关键字段来自哪里、属于 V/P/A/S 哪一种、可信度如何。</p></div></div>
+      <div class="panel"><div class="panel-head"><div><h3>字段证据抽屉</h3><p>选择材料和节点后查看 D Request 中的 field_meta。</p></div></div><div class="inline"><select id="evidenceMaterial"></select><select id="evidenceNode"></select><button class="btn light" id="evidenceBtn">查看证据</button></div><div id="evidenceCards" class="evidence-grid"></div></div>
+      <div class="panel"><h3>版本链</h3><div id="versionChain" class="version-chain">尚无运行结果。</div></div>
+    </section>
+
+    <section class="page" id="page-qa">
+      <div class="section-head"><div><span class="step">QA</span><h2>D 黄金样例与接口一致性</h2><p>直接运行 D 原始 baseline_api.py，并检查输入/输出 Schema、状态、计算模式和 PRWI。</p></div><button class="btn primary" id="qaBtn">运行 QA</button></div><div class="panel"><div class="notice warn">D 原始文件在本项目中保持不改。若黄金样例与当前 D 代码不一致，系统会显示为待 D 确认，而不是由 F 静默修改公式。</div><div class="table-wrap"><table id="qaTable"></table></div><div id="qaNote" class="brief"></div></div>
+    </section>
+
+    <section class="page" id="page-export">
+      <div class="section-head"><div><span class="step">STEP 12</span><h2>人工复核、导出与完整运行轨迹</h2><p>导出结果、数据缺口、来源、版本和 run_id/input_hash。</p></div></div><div class="grid2"><div class="panel"><h3>管理简报</h3><p>导出 Word，包含 Baseline、Scenario、数据质量、Proxy/Assumption、版本和解释边界。</p><button class="btn primary" id="exportBtn">生成 Word 风险简报</button><div id="exportMsg" class="notice">尚未导出。</div></div><div class="panel"><h3>当前运行身份</h3><div id="runIdentity" class="brief">尚无运行。</div></div></div><div class="panel"><div class="panel-head"><div><h3>真实调用日志</h3><p>同一 run_id 关联输入确认、数据查询、Baseline、Scenario、Agent 和导出。</p></div><button class="btn light" id="refreshLogs">刷新</button></div><div class="table-wrap"><table id="logsTable"></table></div></div>
+    </section>
+  </main>
+</div>
+<div id="toast" class="toast"></div>
+<script src="config.js"></script><script src="app.js"></script>
+</body>
+</html>

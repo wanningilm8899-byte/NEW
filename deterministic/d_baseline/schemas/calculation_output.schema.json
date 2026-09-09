@@ -1,0 +1,376 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BaselineOutput",
+  "description": "路径匹配型水风险基准评估——统一输出 JSON Schema（engine v1.2）。status: success/partial/insufficient/conflict/error；calculation_mode: strict/proxy/partial/unscored/none。",
+  "version": "schema-1.0 / 2026-09-09",
+  "type": "object",
+  "required": [
+    "run_id",
+    "input_hash",
+    "status",
+    "calculation_mode",
+    "engine_version",
+    "formula_version",
+    "calculated_at",
+    "materials"
+  ],
+  "properties": {
+    "run_id": {
+      "type": "string"
+    },
+    "input_hash": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "规范化输入的 SHA256(前16位)，用于复现核对"
+    },
+    "enterprise_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "data_version": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "success",
+        "partial",
+        "insufficient",
+        "conflict",
+        "error"
+      ]
+    },
+    "calculation_mode": {
+      "type": "string",
+      "enum": [
+        "strict",
+        "proxy",
+        "partial",
+        "unscored",
+        "none"
+      ]
+    },
+    "theta": {
+      "type": "object"
+    },
+    "engine_version": {
+      "type": "string"
+    },
+    "formula_version": {
+      "type": "string"
+    },
+    "parameter_version": {
+      "type": "string"
+    },
+    "calculated_at": {
+      "type": "string",
+      "description": "UTC 时间戳"
+    },
+    "materials": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "material",
+          "status",
+          "PRWI",
+          "nodes"
+        ],
+        "properties": {
+          "material": {
+            "type": "string"
+          },
+          "U": {
+            "type": "number"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "success",
+              "partial",
+              "insufficient"
+            ]
+          },
+          "PRWI": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "partial 时仅覆盖可完整评分节点子集"
+          },
+          "PRWI_lower": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "PRWI_upper": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "procurement_coverage": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "scored_coverage": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "unknown_share": {
+            "type": "number"
+          },
+          "path_contribution": {
+            "type": "object"
+          },
+          "path_share": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "top_nodes": {
+            "type": "array"
+          },
+          "procurement_HHI": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "risk_HHI": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "overall_confidence": {
+            "type": "string"
+          },
+          "nodes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "node_id",
+                "W",
+                "node_status",
+                "missing_fields",
+                "proxy_fields"
+              ],
+              "properties": {
+                "node_id": {
+                  "type": "string"
+                },
+                "node_name": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "W": {
+                  "type": "number"
+                },
+                "status_proc": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "WS_norm": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "SV_norm": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "DR": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "BWD": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "DYS": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "CTS": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "OA": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "Path_WS": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "Path_DR": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "Path_SV": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "R": {
+                  "type": [
+                    "number",
+                    "null"
+                  ],
+                  "description": "节点风险强度（严格公式）"
+                },
+                "C": {
+                  "type": [
+                    "number",
+                    "null"
+                  ],
+                  "description": "节点贡献 = W×R"
+                },
+                "rank": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "contribution_share": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "node_status": {
+                  "type": "string",
+                  "enum": [
+                    "complete",
+                    "partial"
+                  ]
+                },
+                "missing_fields": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "proxy_fields": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                },
+                "param_provenance": {
+                  "type": "object"
+                },
+                "confidence": {
+                  "type": "object",
+                  "properties": {
+                    "loc_water": {
+                      "type": "string"
+                    },
+                    "procurement": {
+                      "type": "string"
+                    },
+                    "material_param": {
+                      "type": "string"
+                    },
+                    "season": {
+                      "type": "string"
+                    },
+                    "overall": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "missing_fields": {
+            "type": "array"
+          },
+          "proxy_fields": {
+            "type": "array"
+          },
+          "excluded_nodes": {
+            "type": "array"
+          },
+          "warnings": {
+            "type": "array"
+          },
+          "assumptions": {
+            "type": "array"
+          }
+        }
+      }
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "conflicts": {
+      "type": "array"
+    },
+    "missing_fields": {
+      "type": "array"
+    },
+    "proxy_fields": {
+      "type": "array",
+      "description": "由批准代理规则补缺的字段"
+    },
+    "excluded_nodes": {
+      "type": "array"
+    },
+    "warnings": {
+      "type": "array"
+    },
+    "assumptions": {
+      "type": "array"
+    },
+    "source_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "summary": {
+      "type": "object"
+    }
+  }
+}
